@@ -434,13 +434,25 @@
           </div>
         </div>
         <div class="pf-thumbs">
-          <button class="active" onclick="pfSwap(this,'img/aragon-cocina.jpg')"><img src="img/aragon-cocina.jpg" alt="Cocina"></button>
-          <button onclick="pfSwap(this,'img/aragon-sala-1.jpg')"><img src="img/aragon-sala-1.jpg" alt="Sala 1"></button>
-          <button onclick="pfSwap(this,'img/aragon-sala-2.jpg')"><img src="img/aragon-sala-2.jpg" alt="Sala 2"></button>
+          <button class="active" onclick="pfSwap(this,'img/aragon-cocina.jpg','aragon-main')"><img src="img/aragon-cocina.jpg" alt="Cocina"></button>
+          <button onclick="pfSwap(this,'img/aragon-sala-1.jpg','aragon-main')"><img src="img/aragon-sala-1.jpg" alt="Sala 1"></button>
+          <button onclick="pfSwap(this,'img/aragon-sala-2.jpg','aragon-main')"><img src="img/aragon-sala-2.jpg" alt="Sala 2"></button>
+        </div>
+      </div>
+      <div>
+        <div class="pf-real">
+          <img id="fachada-main" src="img/fachada-render.webp" alt="Remodelación de fachada — render">
+          <div class="overlay">
+            <span class="tag">Remodelación de fachada · En proceso</span>
+            <span class="name">Render y avance de obra</span>
+          </div>
+        </div>
+        <div class="pf-thumbs">
+          <button class="active" onclick="pfSwap(this,'img/fachada-render.webp','fachada-main')"><img src="img/fachada-render.webp" alt="Render"></button>
+          <button onclick="pfSwap(this,'img/fachada-construccion.webp','fachada-main')"><img src="img/fachada-construccion.webp" alt="En construcción"></button>
         </div>
       </div>
       <div class="pf-card"><span class="tag">Próximamente</span><span class="name">Ampliación de segundo nivel</span></div>
-      <div class="pf-card"><span class="tag">Próximamente</span><span class="name">Diseño de fachada</span></div>
     </div>
     <p class="pf-note reveal">¿Tienes fotos de otro proyecto? Compártelas y las agregamos aquí.</p>
   </div>
@@ -555,9 +567,9 @@
   }, {threshold:0.15});
   revealEls.forEach(el=>io.observe(el));
 
-  function pfSwap(btn, src){
-    document.getElementById('aragon-main').src = src;
-    document.querySelectorAll('.pf-thumbs button').forEach(b=>b.classList.remove('active'));
+  function pfSwap(btn, src, targetId){
+    document.getElementById(targetId || 'aragon-main').src = src;
+    btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
   }
 </script>
