@@ -246,6 +246,18 @@
   }
   input:focus, select:focus, textarea:focus{outline:none; border-color:var(--navy);}
   textarea{resize:vertical; min-height:100px;}
+  .form-fieldset-label{
+    font-family:'IBM Plex Mono'; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--orange); margin-top:6px; padding-top:14px; border-top:1px solid rgba(31,42,51,0.14);
+  }
+  form > .form-fieldset-label:first-child{margin-top:0; padding-top:0; border-top:none;}
+  .check-group{display:flex; flex-wrap:wrap; gap:10px 20px;}
+  .check-group label{
+    display:flex; align-items:center; gap:7px; font-family:'Inter'; font-size:0.88rem;
+    text-transform:none; letter-spacing:normal; color:var(--ink); margin-bottom:0; cursor:pointer;
+  }
+  .check-group input[type="checkbox"]{width:auto; padding:0; accent-color:var(--orange); cursor:pointer;}
+  .form-note{font-size:0.82rem; color:var(--graphite); font-style:italic;}
   @media (max-width:820px){.contact-grid{grid-template-columns:1fr;} .form-row{grid-template-columns:1fr;}}
 
   /* ---------- Footer ---------- */
@@ -501,37 +513,104 @@
           <span class="val">Ciudad de México y Estado de México</span>
         </div>
       </div>
-      <form onsubmit="event.preventDefault(); this.reset(); document.getElementById('form-ok').style.display='block';">
+      <form id="cotizacion-form" onsubmit="return enviarPorWhatsApp(event);">
+        <div class="form-fieldset-label">1 · Datos de contacto</div>
         <div class="form-row">
           <div>
-            <label for="nombre">Nombre</label>
+            <label for="nombre">Nombre completo</label>
             <input id="nombre" type="text" required placeholder="Tu nombre">
           </div>
           <div>
-            <label for="telefono">Teléfono</label>
+            <label for="telefono">Teléfono / WhatsApp</label>
             <input id="telefono" type="tel" required placeholder="55 0000 0000">
           </div>
         </div>
         <div>
-          <label for="correo">Correo</label>
-          <input id="correo" type="email" required placeholder="tucorreo@ejemplo.com">
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" type="email" placeholder="tucorreo@ejemplo.com">
+        </div>
+
+        <div class="form-fieldset-label">2 · Ubicación del proyecto</div>
+        <div class="form-row">
+          <div>
+            <label for="colonia">Colonia, alcaldía/municipio</label>
+            <input id="colonia" type="text" placeholder="Ej. Del Valle, Benito Juárez">
+          </div>
+          <div>
+            <label for="estado">Estado</label>
+            <select id="estado">
+              <option>Ciudad de México</option>
+              <option>Estado de México</option>
+              <option>Otro</option>
+            </select>
+          </div>
         </div>
         <div>
-          <label for="servicio">Tipo de servicio</label>
-          <select id="servicio">
-            <option>Elaboración de planos</option>
-            <option>Diseño arquitectónico</option>
-            <option>Remodelación</option>
-            <option>Ampliación</option>
-            <option>Aún no estoy seguro</option>
+          <label for="tipo-propiedad">La propiedad es...</label>
+          <select id="tipo-propiedad">
+            <option>Propiedad ya construida</option>
+            <option>Terreno</option>
+            <option>Obra en proceso</option>
           </select>
         </div>
-        <div>
-          <label for="mensaje">Cuéntanos sobre tu proyecto</label>
-          <textarea id="mensaje" placeholder="Ubicación, tamaño aproximado, qué te gustaría lograr..."></textarea>
+
+        <div class="form-fieldset-label">3 · Tipo de servicio (puedes marcar más de uno)</div>
+        <div class="check-group">
+          <label><input type="checkbox" name="servicio" value="Elaboración de planos"> Elaboración de planos</label>
+          <label><input type="checkbox" name="servicio" value="Diseño arquitectónico"> Diseño arquitectónico</label>
+          <label><input type="checkbox" name="servicio" value="Remodelación"> Remodelación</label>
+          <label><input type="checkbox" name="servicio" value="Ampliación"> Ampliación</label>
+          <label><input type="checkbox" name="servicio" value="Solo asesoría / no estoy seguro"> Solo asesoría / no estoy seguro</label>
         </div>
-        <button class="btn btn-orange" type="submit" style="width:fit-content;">Enviar solicitud</button>
-        <p id="form-ok" style="display:none; font-size:0.85rem; color:var(--navy); font-family:'IBM Plex Mono';">Gracias — tu solicitud quedó registrada. Te contactaremos pronto.</p>
+
+        <div>
+          <label for="descripcion">4 · Descripción general del proyecto</label>
+          <textarea id="descripcion" required placeholder='Cuéntanos qué quieres lograr. Ej. "quiero ampliar un segundo nivel para dos recámaras", "remodelar cocina y baño"...'></textarea>
+        </div>
+
+        <div class="form-fieldset-label">5 · Datos específicos</div>
+        <div class="form-row">
+          <div>
+            <label for="m2">M² aproximados a intervenir</label>
+            <input id="m2" type="text" placeholder="Ej. 45 m²">
+          </div>
+          <div>
+            <label for="espacios">Espacios o piezas involucrados</label>
+            <input id="espacios" type="text" placeholder="Ej. 1 cocina, 2 baños">
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="num-planos">Planos que necesitas (si lo sabes)</label>
+            <input id="num-planos" type="text" placeholder="Arquitectónico, estructural...">
+          </div>
+          <div>
+            <label for="planos-existentes">¿Tienes planos existentes?</label>
+            <select id="planos-existentes">
+              <option>No</option>
+              <option>Sí</option>
+            </select>
+          </div>
+        </div>
+        <p class="form-note">Este formulario abre WhatsApp con tu solicitud lista para enviar — ahí mismo puedes adjuntar fotos del sitio o tus planos existentes.</p>
+
+        <div class="form-fieldset-label">6 · Otros datos (opcional)</div>
+        <div class="form-row">
+          <div>
+            <label for="presupuesto">Presupuesto estimado</label>
+            <input id="presupuesto" type="text" placeholder="Opcional">
+          </div>
+          <div>
+            <label for="tiempo">¿Cuándo te gustaría iniciar?</label>
+            <input id="tiempo" type="text" placeholder="Opcional">
+          </div>
+        </div>
+        <div>
+          <label for="referencia">Referencia visual o estilo que te guste</label>
+          <input id="referencia" type="text" placeholder="Opcional">
+        </div>
+
+        <button class="btn btn-orange" type="submit" style="width:fit-content;">Enviar solicitud por WhatsApp</button>
       </form>
     </div>
   </div>
@@ -597,6 +676,49 @@
   });
   lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
+
+  const WHATSAPP_NUMERO = '525578367814';
+
+  function enviarPorWhatsApp(event){
+    event.preventDefault();
+    const val = id => document.getElementById(id).value.trim();
+    const servicios = Array.from(document.querySelectorAll('input[name="servicio"]:checked')).map(c => c.value);
+
+    const lineas = [
+      '*Solicitud de cotización — MV Constructores*',
+      '',
+      '*Datos de contacto*',
+      `Nombre: ${val('nombre')}`,
+      `Teléfono: ${val('telefono')}`,
+    ];
+    if (val('correo')) lineas.push(`Correo: ${val('correo')}`);
+
+    lineas.push('', '*Ubicación del proyecto*');
+    if (val('colonia')) lineas.push(`Colonia/alcaldía: ${val('colonia')}`);
+    lineas.push(`Estado: ${val('estado')}`);
+    lineas.push(`Tipo de propiedad: ${val('tipo-propiedad')}`);
+
+    lineas.push('', '*Tipo de servicio*', servicios.length ? servicios.join(', ') : 'No especificado');
+
+    lineas.push('', '*Descripción del proyecto*', val('descripcion'));
+
+    lineas.push('', '*Datos específicos*');
+    if (val('m2')) lineas.push(`M² aproximados: ${val('m2')}`);
+    if (val('espacios')) lineas.push(`Espacios/piezas: ${val('espacios')}`);
+    if (val('num-planos')) lineas.push(`Planos que necesita: ${val('num-planos')}`);
+    lineas.push(`¿Planos existentes?: ${val('planos-existentes')}`);
+
+    if (val('presupuesto') || val('tiempo') || val('referencia')) {
+      lineas.push('', '*Otros datos*');
+      if (val('presupuesto')) lineas.push(`Presupuesto estimado: ${val('presupuesto')}`);
+      if (val('tiempo')) lineas.push(`Inicio deseado: ${val('tiempo')}`);
+      if (val('referencia')) lineas.push(`Referencia/estilo: ${val('referencia')}`);
+    }
+
+    const mensaje = encodeURIComponent(lineas.join('\n'));
+    window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${mensaje}`, '_blank');
+    return false;
+  }
 </script>
 
 </body>
