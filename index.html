@@ -215,6 +215,20 @@
   .pf-thumbs button img{width:100%; height:100%; object-fit:cover; display:block;}
   .pf-thumbs button.active{border-color:var(--orange); border-width:2px;}
 
+  .lightbox{
+    position:fixed; inset:0; z-index:999; background:rgba(10,20,30,0.92);
+    display:flex; align-items:center; justify-content:center; padding:40px;
+    opacity:0; visibility:hidden; transition:opacity .25s ease;
+  }
+  .lightbox.open{opacity:1; visibility:visible;}
+  .lightbox img{max-width:100%; max-height:100%; border-radius:6px; box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+  .lightbox-close{
+    position:absolute; top:22px; right:28px; width:42px; height:42px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.35); background:rgba(255,255,255,0.08); color:#fff;
+    font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-close:hover{background:rgba(255,255,255,0.18);}
+
   /* ---------- Nosotros ---------- */
   .nosotros{display:grid; grid-template-columns:0.9fr 1.1fr; gap:60px; align-items:center;}
   .nosotros-visual{
@@ -587,6 +601,11 @@
   </div>
 </footer>
 
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Cerrar">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <script>
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries)=>{
@@ -599,6 +618,25 @@
     btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
   }
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  function openLightbox(src, alt){
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('open');
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+  }
+  document.querySelectorAll('.pf-real').forEach(pf=>{
+    pf.addEventListener('click', ()=>{
+      const img = pf.querySelector('img');
+      openLightbox(img.src, img.alt);
+    });
+  });
+  lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
 </script>
 
 </body>
